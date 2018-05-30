@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Wallscope Code Sprint</title>
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="n3.js"></script>
+  <script src="main.js"></script>
+  <style>
+    #forms, #results {
+      display: flex;
+      justify-content: space-around;
+    }
+    #left,#right{
+      width: 45%;
+      margin :10px;
+    }
+    #refs {
+      margin: 10px;
+      width: 450px;
+    }
+
+    .ref {
+      border: 3px solid black;
+      padding: 2px;
+      margin: 10px 0;
+      cursor: pointer;
+    }
+
+    .ref:hover {
+      border-color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="forms">
+    <form id=file>
+      Pick a file:
+      <input type="file" name="file" />
+      <button id="submit" type="submit">Upload</button>
+    </form>
+    <form id=sparql>
+      <textarea id="sparql-query" rows="10" cols="80">
+select (year(?date) as ?year) (SUM(?count) as ?total)
+where {
+  ?bnf skos:broader+ <http://wallscope.co.uk/resource/bnf/0407010F0AA> .
+  ?s <http://wallscope.co.uk/ontology/bnf/code/> ?bnf ;
+    <http://purl.org/linked-data/sdmx/2009/dimension/refPeriod/> ?date ;
+    <http://wallscope.co.uk/ontology/isds/practice/> <http://wallscope.co.uk/resource/isds/practice/25436> ;
+    <http://wallscope.co.uk/ontology/isds/item-count/> ?count .
+  } GROUP BY year(?date)
+        </textarea>
+        <button id=send-sparql>Send Query</button>
+    </form>
+  </div>
+  <div id=results>
+    <div id=left>
+        <div id=refs></div>
+        <div id=entities></div>
+    </div>
+    <div id=right>
+      <div id=sparql-results></div>
+    </div>
+  </div>
+</body>
+
+</html>
